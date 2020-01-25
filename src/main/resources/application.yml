@@ -1,0 +1,15 @@
+mongodb:
+  url: ${MONGODB_URL:mongodb://localhost}
+  db: ${MONGODB_DB_NAME:neueda}
+  user: ${MONGODB_USER:admin}
+  password: ${MONGODB_PASSWORD:test}
+  connectTimeout: ${MONGODB_CONNECT_TIMEOUT:60000}
+  socketTimeout: ${MONGODB_SOCKET_TIMEOUT:120000}
+  maxConnectionIdleTime: ${MONGODB_MAX_IDLE_TIME:60000}
+  retryWrites: ${MONGODB_RETRY_WRITES:true}
+  minConnectionsPerHost: ${MONGODB_MIN_CONNECTIONS_PER_HOST:0}
+  maxConnectionsPerHost: ${MONGODB_MAX_CONNECTIONS_PER_HOST:25}
+  writeConcern:
+    w: ${MONGODB_WRITE_CONCERN_W:majority}
+    wTimeoutMS: ${MONGODB_WRITE_CONCERN_WTIMEOUTMS:30000}
+    journal: ${MONGODB_WRITE_CONCERN_JOURNAL:true}

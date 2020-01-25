@@ -1,0 +1,9 @@
+version: '3.3'
+
+services:
+
+  mongodb:
+    container_name: neueda-mongo
+    image: mongo:4.0
+    ports:
+      - "27017:27017"
