@@ -50,7 +50,48 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+
     <plugins>
+      <!-- This is for assembling an executable JAR -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration combine.self="append">
+          <archive>
+            <manifest>
+              <mainClass>ustinov.sergey.shortener.UrlShortenerApp</mainClass>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <!-- This is for assembling an executable JAR -->
+
+      <!-- This is for assembling service for further distribution in docker container -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <!-- Assembling service with all its depending libraries -->
+          <execution>
+            <id>make-assembly-libraries</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <finalName>service</finalName>
+              <descriptors>
+                <descriptor>src/assembly/assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- This is for assembling service for further distribution in docker container -->
+
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>

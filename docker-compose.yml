@@ -1,9 +1,19 @@
-version: '3.3'
+version: '3.5'
 
 services:
-
   mongodb:
     container_name: neueda-mongo
     image: mongo:4.0
     ports:
       - "27017:27017"
+    networks:
+      neueda-virtual:
+        ipv4_address: 172.19.0.4
+
+networks:
+  neueda-virtual:
+    name: neueda-virtual
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
