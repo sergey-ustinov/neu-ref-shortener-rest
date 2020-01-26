@@ -1,11 +1,13 @@
 package ustinov.sergey.shortener
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import ustinov.sergey.shortener.exceptions.WrongUserInputException
@@ -14,13 +16,18 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @RestController
+@RequestMapping("/api/v1")
 class Controller {
     @Autowired
     private lateinit var referenceManagerService: ReferenceManagerService
     @Autowired
     private lateinit var validatorService: ValidatorService
+    @Value("\${server.port}")
+    private lateinit var port: String
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}",
+        produces = [ MediaType.APPLICATION_JSON_VALUE ]
+    )
     fun resolve(
         @PathVariable id: String,
         httpRequest: HttpServletRequest,
@@ -50,6 +57,6 @@ class Controller {
     }
 
     private fun convertToResponse(reference: Reference): String {
-        return "{\"short_url\" : \"localhost:8080/${reference.base62Ref}\"}"
+        return "{\"shortUrl\" : \"localhost:$port/${reference.base62Ref}\"}"
     }
 }

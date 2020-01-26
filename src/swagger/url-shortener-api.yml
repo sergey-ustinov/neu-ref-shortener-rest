@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: URL Shortener API Specification
+  version: 1.0
+servers:
+  - url: http://localhost:8022/
+    variables: {}
+security:
+  - Bearer: []
+paths:
+  /api/v1:
+    post:
+      tags:
+        - URL
+      summary: Creates shortened version of the source URL and returning it.
+      operationId: create
+      requestBody:
+        description: Source URL for shortening
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: URL address was successfully shortened and server responded with description object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceResponse'
+        "400":
+          description: User trying to shorten an invalid input data that couldn't be recognized as URL address (or already been shortened).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/{id}:
+    get:
+      tags:
+        - URL
+      summary: Resolve short URL to its source.
+      operationId: resolve
+      parameters:
+        - name: id
+          in: path
+          description: Identifier that was given in the response to the request of 'URL shortening'.
+          required: true
+          content:
+            '*/*':
+              schema:
+                type: string
+      responses:
+        "200":
+          description: In a case of success redirect to the source URL will be performed.
+        "400":
+          description: User has invoked API with incorrect input data. For instance, wrong link format has been provided.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Provided id doesn't exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      title: ErrorResponse
+      description: Describes error that has appeared during the invocation of API.
+      properties:
+        timestamp:
+          type: string
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
+    ReferenceResponse:
+      type: object
+      title: ReferenceResponse
+      description: Response that contains shorten URL address of source URL address.
+      properties:
+        shortUrl:
+          type: string
+      required:
+        - shortUrl
