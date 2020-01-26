@@ -6,7 +6,9 @@ import java.util.Arrays
 @Component
 class PositiveNumbersBase62Codec {
     companion object {
-        val DICTIONARY_62 = charArrayOf(
+        const val DICTIONARY_62_MAX_VALUE = "AzL8n0Y58m7"
+
+        private val DICTIONARY_62 = charArrayOf(
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -15,7 +17,7 @@ class PositiveNumbersBase62Codec {
             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
             'y', 'z'
         )
-        const val DICTIONARY_62_MAX_VALUE = "AzL8n0Y58m7"
+        private val LEADING_ZEROES_REGEXP = "^0+(?!\$)".toRegex()
     }
 
     private var dictionary: CharArray = DICTIONARY_62
@@ -35,17 +37,24 @@ class PositiveNumbersBase62Codec {
     }
 
     fun decode(input: String): Long {
-        check(validateBase62Value(input)) { "Provided value has wrong encoding" }
-        check(isBase62ValueIsInRange(input)) { "Provided value is out of allowed range" }
+        val inputEd = removeLeadingZeroes(input)
+        check(!inputEd.isBlank()) { "Provided value is empty" }
+        check(isBase62ValueHasProperLength(inputEd)) { "Provided value has wrong length" }
+        check(validateBase62Value(inputEd)) { "Provided value has wrong encoding" }
+        check(isBase62ValueIsInRange(inputEd)) { "Provided value is out of allowed range" }
 
         val accumulator = mutableListOf<Long>()
         var pow: Byte = 0
-        for (digitChar in input.reversed()) {
+        for (digitChar in inputEd.reversed()) {
             val digit = convertCharToBase10(digitChar)
             val multiplier = toPositivePower(dictionary.size.toByte(), pow++)
             accumulator.add(digit * multiplier)
         }
         return accumulator.sum()
+    }
+
+    private fun removeLeadingZeroes(input: String): String {
+        return LEADING_ZEROES_REGEXP.replaceFirst(input, "")
     }
 
     private fun validateBase62Value(input: String): Boolean {
@@ -57,7 +66,15 @@ class PositiveNumbersBase62Codec {
         return true
     }
 
+    private fun isBase62ValueHasProperLength(input: String): Boolean {
+        return DICTIONARY_62_MAX_VALUE.length >= input.length
+    }
+
     private fun isBase62ValueIsInRange(input: String): Boolean {
+        when {
+            DICTIONARY_62_MAX_VALUE.length < input.length -> return false
+            DICTIONARY_62_MAX_VALUE.length > input.length -> return true
+        }
         return listOf(DICTIONARY_62_MAX_VALUE, input).max() == DICTIONARY_62_MAX_VALUE
     }
 
