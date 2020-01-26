@@ -4,9 +4,11 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.apache.commons.lang3.StringUtils.isAlphanumeric
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import kotlin.random.Random
 import kotlin.test.assertEquals
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PositiveNumbersBase62CodecTest {
 
     // 9,223,372,036,854,775,808
