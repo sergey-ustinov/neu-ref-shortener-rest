@@ -56,6 +56,6 @@ class Controller {
     }
 
     private fun convertToResponse(reference: Reference): String {
-        return "{\"shortUrl\" : \"http://localhost:$port/${reference.base62Ref}\"}"
+        return "{\"shortUrl\" : \"http://localhost:$port/api/v1/${reference.base62Ref}\"}"
     }
 }
