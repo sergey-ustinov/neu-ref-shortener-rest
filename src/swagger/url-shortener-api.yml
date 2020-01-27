@@ -29,7 +29,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReferenceResponse'
         "400":
-          description: User trying to shorten an invalid input data that couldn't be recognized as URL address (or already been shortened).
+          description: User trying to shorten an invalid input data that couldn't be recognized as URL address (or this URL belongs do domain that couldn't be shorten).
           content:
             application/json:
               schema:

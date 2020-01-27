@@ -1,6 +1,6 @@
 package ustinov.sergey.shortener
 
-import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -9,17 +9,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import ustinov.sergey.shortener.ApplicationConfigurer.Companion.API_BASE_PATH
 
 @Configuration
 @EnableWebSecurity
 open class WebSecurity : WebSecurityConfigurerAdapter() {
-
-    private val apiPath = "/api/v1"
-
     @Bean
-    open fun corsConfigurer(@Qualifier("AllowedOrigins") origins: String): WebMvcConfigurer {
-        val allowedOrigins = origins.split(",")
-
+    open fun corsConfigurer(cfg: ApplicationConfigurer): WebMvcConfigurer {
+        val allowedOrigins = cfg.getAllowedOrigins()
         return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
                 registry.addMapping("/**")
@@ -36,7 +33,7 @@ open class WebSecurity : WebSecurityConfigurerAdapter() {
                 HttpMethod.GET,
                 "favicon.ico"
             )
-            .antMatchers("$apiPath/**")
+            .antMatchers("$API_BASE_PATH/**")
             .antMatchers("/error")
     }
 }
