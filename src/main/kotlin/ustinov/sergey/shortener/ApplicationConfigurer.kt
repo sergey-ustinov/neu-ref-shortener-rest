@@ -1,40 +1,29 @@
 package ustinov.sergey.shortener
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
-import javax.annotation.PostConstruct
-
-@Component
-class ApplicationConfigurer {
+open class ApplicationConfigurer(
+    private val serverPort: Int,
+    origins: String
+) {
     companion object {
         const val API_BASE_PATH = "/api/v1"
     }
 
-    @Value("\${server.port}")
-    private lateinit var port: String
-    @Value("\${allowed-origins}")
-    private lateinit var allowedOrigins: String
+    private val allowedOrigins: List<String> = origins.split(",")
+    private val serverDomainNames = listOf(
+        "localhost:$serverPort",
+        "127.0.0.1:$serverPort"
+    )
+    private val serverURLs = serverDomainNames.map {
+        listOf("http://$it", "https://$it", it)
+    }.flatten()
 
-    private lateinit var serverDomainNames: List<String>
-    private lateinit var serverURLs: List<String>
+    fun getPort() = serverPort
 
-    @PostConstruct
-    fun init() {
-        serverDomainNames = listOf(
-            "localhost:$port", "127.0.0.1:$port"
-        )
-        serverURLs = serverDomainNames.map {
-            listOf("http://$it", "https://$it", it)
-        }.flatten()
-    }
-
-    fun getPort() = port
-
-    fun getServerBasePath() = "http://localhost:$port$API_BASE_PATH"
+    fun getServerBasePath() = "http://localhost:$serverPort$API_BASE_PATH"
 
     fun getServerDomainNames() = serverDomainNames
 
-    fun getServerURLs() = serverURLs
+    open fun getServerURLs(): List<String> = serverURLs
 
-    fun getAllowedOrigins(): List<String> = allowedOrigins.split(",")
+    fun getAllowedOrigins() = allowedOrigins
 }
