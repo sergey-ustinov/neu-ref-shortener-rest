@@ -1,6 +1,8 @@
 server:
   port: ${PORT:8022}
 
+allowed-origins: ${ALLOWED_ORIGINS_WITH_DELIMETER:http://localhost:8023}
+
 mongodb:
   url: ${MONGODB_URL:mongodb://127.0.0.1:27017}
   db: ${MONGODB_DB_NAME:neueda}

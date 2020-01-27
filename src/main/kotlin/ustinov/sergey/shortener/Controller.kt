@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import ustinov.sergey.shortener.exceptions.WrongUserInputException
 import ustinov.sergey.shortener.model.Reference
@@ -57,6 +56,6 @@ class Controller {
     }
 
     private fun convertToResponse(reference: Reference): String {
-        return "{\"shortUrl\" : \"localhost:$port/${reference.base62Ref}\"}"
+        return "{\"shortUrl\" : \"http://localhost:$port/${reference.base62Ref}\"}"
     }
 }
