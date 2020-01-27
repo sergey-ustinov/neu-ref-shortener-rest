@@ -1,3 +1,5 @@
+use neueda
+
 db.reference.drop();
 db.createCollection("reference");
 db.reference.createIndex({ "base10Ref": 1 }, { unique: true, name: "reference_base10Ref_uidx" });
