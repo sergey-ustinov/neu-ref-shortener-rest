@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Component
 import ustinov.sergey.shortener.model.Reference
 import ustinov.sergey.shortener.model.Sequence
+import java.util.SortedSet
 
 @Component
 class DBService  {
@@ -31,17 +32,29 @@ class DBService  {
         return mongoTemplate.insert(reference)
     }
 
+    fun save(references: List<Reference>): List<Reference> {
+        return mongoTemplate.insertAll(references).toList()
+    }
+
     fun getNextSequenceValue(): Long {
+        return getNextSequenceValues(1).first()
+    }
+
+    fun getNextSequenceValues(increment: Int): SortedSet<Long> {
         val options = FindAndModifyOptions.options()
             .returnNew(true)
             .upsert(true)
 
         val sequence = mongoTemplate.findAndModify(
             query(where("name").`is`("default")),
-            Update().inc("value", 1),
+            Update().inc("value", increment),
             options,
             Sequence::class.java
         )
-        return sequence!!.value
+
+        val start = sequence!!.value - increment + 1
+        val end = sequence.value
+
+        return (start..end).toSortedSet()
     }
 }

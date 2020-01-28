@@ -8,7 +8,7 @@ mongodb:
   db: ${MONGODB_DB_NAME:neueda}
   connectTimeout: ${MONGODB_CONNECT_TIMEOUT:60000}
   socketTimeout: ${MONGODB_SOCKET_TIMEOUT:90000}
-  maxConnectionIdleTime: ${MONGODB_MAX_IDLE_TIME:60000}
+  maxConnectionIdleTime: ${MONGODB_MAX_IDLE_TIME:120000}
   retryWrites: ${MONGODB_RETRY_WRITES:true}
   minConnectionsPerHost: ${MONGODB_MIN_CONNECTIONS_PER_HOST:10}
   maxConnectionsPerHost: ${MONGODB_MAX_CONNECTIONS_PER_HOST:150}

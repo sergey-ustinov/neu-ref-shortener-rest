@@ -11,8 +11,8 @@ paths:
   /api/v1:
     post:
       tags:
-        - URL
-      summary: Creates shortened version of the source URL and returning it.
+        - Create
+      summary: Creates shortened version of the provided source URL and returning it.
       operationId: create
       requestBody:
         description: Source URL for shortening
@@ -29,7 +29,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReferenceResponse'
         "400":
-          description: User trying to shorten an invalid input data that couldn't be recognized as URL address (or this URL belongs do domain that couldn't be shorten).
+          description: User is trying to shorten an invalid input data that couldn't be recognized as URL address (or this URL belongs do domain that couldn't be shortened).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/bulk:
+    post:
+      tags:
+        - Create
+      summary: Creates shortened versions of the provided source URLs and returning it.
+      operationId: bulkCreate
+      requestBody:
+        description: List of source URL addresses for shortening separated with newline '\n' character.
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: URL addresses were successfully shortened and server responded with description object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferencesResponse'
+        "400":
+          description: User is trying to shorten an invalid input data contains strings that couldn't be recognized as URL addresses (or some of them are belongs do domain that couldn't be shortened).
           content:
             application/json:
               schema:
@@ -37,7 +63,7 @@ paths:
   /api/v1/{id}:
     get:
       tags:
-        - URL
+        - Resolve
       summary: Resolve short URL to its source.
       operationId: resolve
       parameters:
@@ -91,9 +117,20 @@ components:
     ReferenceResponse:
       type: object
       title: ReferenceResponse
-      description: Response that contains shorten URL address of source URL address.
+      description: Response that contains shortened URL address of source URL address.
       properties:
         shortUrl:
           type: string
+      required:
+        - shortUrl
+    ReferencesResponse:
+      type: object
+      title: ReferencesResponse
+      description: Response that contains shortened URL addresses of source URL addresses.
+      properties:
+        shortUrl:
+          type: array
+            items:
+              type: string
       required:
         - shortUrl

@@ -7,6 +7,7 @@ import ustinov.sergey.shortener.exceptions.ReferenceNotFoundException
 import ustinov.sergey.shortener.exceptions.WrongUserInputException
 import ustinov.sergey.shortener.model.Reference
 import java.util.Objects.isNull
+import java.util.TreeMap
 
 @Component
 class ReferenceManagerService {
@@ -34,5 +35,18 @@ class ReferenceManagerService {
         val base62 = positiveNumbersBase62Codec.encode(base10)
         logger.info("Generating new reference: {} / {}", base10, base62)
         return dbService.save(Reference(base10, base62, source))
+    }
+
+    fun createNewReferences(source: List<String>): List<Reference> {
+        val base10SeqValues = dbService.getNextSequenceValues(source.size)
+        val references = source.mapIndexed { index, input ->
+            val e = base10SeqValues.elementAt(index)
+            Reference(
+                e, positiveNumbersBase62Codec.encode(e), input
+            )
+        }
+        val ids = references.map { "${it.base10Ref} / ${it.base62Ref}" }
+        logger.info("Generating new references: {}", ids.joinToString(prefix = "[ ", postfix = " ]"))
+        return dbService.save(references)
     }
 }
