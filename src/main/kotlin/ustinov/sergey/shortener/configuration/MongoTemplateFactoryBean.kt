@@ -1,21 +1,22 @@
 package ustinov.sergey.shortener.configuration
 
+import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
 import com.mongodb.MongoClientURI
 import com.mongodb.ReadConcern
 import com.mongodb.ReadPreference
-import com.mongodb.MongoClient
+import com.mongodb.WriteConcern
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext
-import com.mongodb.WriteConcern
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory
-import java.util.concurrent.TimeUnit
+import ustinov.sergey.shortener.DisposableMongoClient
+import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @Configuration
 open class MongoTemplateFactoryBean {
@@ -24,26 +25,20 @@ open class MongoTemplateFactoryBean {
     private lateinit var config: MongoConfig
 
     @Bean
-    open fun createMongoTemplate(): MongoTemplate {
-        val mongoDbFactory = SimpleMongoDbFactory(mongoClient(), config.db!!)
+    open fun createMongoTemplate(mongoClient: DisposableMongoClient): MongoTemplate {
+        val mongoDbFactory = SimpleMongoDbFactory(mongoClient, config.db!!)
         return MongoTemplate(mongoDbFactory, getConverter(mongoDbFactory))
     }
 
-    private fun mongoClient(): MongoClient {
+    @Bean
+    open fun mongoClient(): DisposableMongoClient {
         val optsBuilder = MongoClientOptions.Builder()
-            .connectionsPerHost(config.maxConnectionsPerHost!!)
-            .minConnectionsPerHost(config.minConnectionsPerHost!!)
             .readPreference(ReadPreference.primary())
             .readConcern(ReadConcern.MAJORITY)
             .retryWrites(config.retryWrites!!)
-            .connectTimeout(config.connectTimeout!!)
-            .socketTimeout(config.socketTimeout!!)
-            .maxConnectionIdleTime(config.maxConnectionIdleTime!!)
-
-        config.writeConcern?.let { optsBuilder.writeConcern(WriteConcern(it.w!!).withWTimeout(it.wTimeoutMS!!, TimeUnit.MILLISECONDS).withJournal(it.journal!!)) }
-
-        // TODO : perform close here
-        return MongoClient(MongoClientURI(config.url!!, optsBuilder))
+            .withConnectionSettings()
+            .withWriteConcern()
+        return DisposableMongoClient(MongoClientURI(config.url!!, optsBuilder))
     }
 
     private fun getConverter(mongoDbFactory: SimpleMongoDbFactory): MappingMongoConverter {
@@ -51,5 +46,25 @@ open class MongoTemplateFactoryBean {
         converter.typeMapper = DefaultMongoTypeMapper(null)
         converter.afterPropertiesSet()
         return converter
+    }
+
+    private fun MongoClientOptions.Builder.withConnectionSettings(): MongoClientOptions.Builder {
+        connectionsPerHost(config.maxConnectionsPerHost!!)
+            .minConnectionsPerHost(config.minConnectionsPerHost!!)
+            .connectTimeout(config.connectTimeout!!)
+            .socketTimeout(config.socketTimeout!!)
+            .maxConnectionIdleTime(config.maxConnectionIdleTime!!)
+        return this
+    }
+
+    private fun MongoClientOptions.Builder.withWriteConcern(): MongoClientOptions.Builder {
+        config.writeConcern?.apply {
+            writeConcern(
+                WriteConcern(w!!)
+                    .withWTimeout(wTimeoutMS!!, MILLISECONDS)
+                    .withJournal(journal!!)
+            )
+        }
+        return this
     }
 }

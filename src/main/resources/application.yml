@@ -6,14 +6,12 @@ allowed-origins: ${ALLOWED_ORIGINS_WITH_DELIMETER:http://localhost:8023}
 mongodb:
   url: ${MONGODB_URL:mongodb://127.0.0.1:27017}
   db: ${MONGODB_DB_NAME:neueda}
-  user: ${MONGODB_USER:admin}
-  password: ${MONGODB_PASSWORD:test}
   connectTimeout: ${MONGODB_CONNECT_TIMEOUT:60000}
-  socketTimeout: ${MONGODB_SOCKET_TIMEOUT:120000}
+  socketTimeout: ${MONGODB_SOCKET_TIMEOUT:90000}
   maxConnectionIdleTime: ${MONGODB_MAX_IDLE_TIME:60000}
   retryWrites: ${MONGODB_RETRY_WRITES:true}
-  minConnectionsPerHost: ${MONGODB_MIN_CONNECTIONS_PER_HOST:0}
-  maxConnectionsPerHost: ${MONGODB_MAX_CONNECTIONS_PER_HOST:25}
+  minConnectionsPerHost: ${MONGODB_MIN_CONNECTIONS_PER_HOST:10}
+  maxConnectionsPerHost: ${MONGODB_MAX_CONNECTIONS_PER_HOST:150}
   writeConcern:
     w: ${MONGODB_WRITE_CONCERN_W:majority}
     wTimeoutMS: ${MONGODB_WRITE_CONCERN_WTIMEOUTMS:30000}

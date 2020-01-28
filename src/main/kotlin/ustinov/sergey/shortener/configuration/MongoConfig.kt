@@ -6,8 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class MongoConfig {
     var url: String? = null
     var db: String? = null
-    var password: String? = null
-    var user: String? = null
 
     var connectTimeout: Int? = null
     var socketTimeout: Int? = null

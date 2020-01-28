@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfigurat
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean
 import org.springframework.context.annotation.Bean
 import ustinov.sergey.shortener.JavaSystemVariablesPrinter.printJavaVariables
 import ustinov.sergey.shortener.configuration.ApplicationConfigurer
 import ustinov.sergey.shortener.configuration.MongoConfig
+import javax.servlet.ServletContextListener
 
 @SpringBootApplication(
     exclude = [
@@ -35,4 +37,8 @@ open class UrlShortenerApp {
         @Value("\${server.port}") port: Int,
         @Value("\${allowed-origins}") origins: String
     ) = ApplicationConfigurer(port, origins).printApplicationVariables()
+
+    @Bean
+    open fun servletListener(disposableBeans: List<Disposable>)
+        = ServletListenerRegistrationBean<ServletContextListener>(ExampleServletContextListener(disposableBeans))
 }
