@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.configuration
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

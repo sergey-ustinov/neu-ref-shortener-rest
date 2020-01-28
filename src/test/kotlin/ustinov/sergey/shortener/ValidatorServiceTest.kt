@@ -9,9 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
-import ustinov.sergey.shortener.ValidatorService.Companion.MAX_REFERENCE_LENGTH
-import ustinov.sergey.shortener.ValidatorService.Protocol.Companion.ALLOWED_PROTOCOLS
-import ustinov.sergey.shortener.ValidatorService.Protocol.Companion.NOT_ALLOWED_PROTOCOLS
+import ustinov.sergey.shortener.service.ValidatorService.Companion.MAX_REFERENCE_LENGTH
+import ustinov.sergey.shortener.Protocol.Companion.ALLOWED_PROTOCOLS
+import ustinov.sergey.shortener.Protocol.Companion.NOT_ALLOWED_PROTOCOLS
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer
+import ustinov.sergey.shortener.service.ValidatorService
 import kotlin.random.Random
 
 @ExtendWith(MockitoExtension::class)
@@ -111,13 +113,12 @@ class ValidatorServiceTest {
         `when`(cfg.getServerURLs()).thenAnswer {
             listOf(
                 "httP://$restrictedDomain",
-                "HtTps://$restrictedDomain",
                 restrictedDomain
             )
         }
 
-        for (p in ALLOWED_PROTOCOLS) {
-            val validProtocol = p.getPrefix().toLowerCase()
+        for (p in listOf(Protocol.HTTP, null)) {
+            val validProtocol = p?.getPrefix()?.toLowerCase() ?: ""
             val result = service.isDomainAllowed(
                 "$validProtocol$restrictedDomain/path-to-resource?id=1112"
             )

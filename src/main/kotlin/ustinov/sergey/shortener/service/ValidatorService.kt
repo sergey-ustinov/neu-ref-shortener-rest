@@ -1,6 +1,8 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.service
 
 import org.springframework.stereotype.Component
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer
+import ustinov.sergey.shortener.Protocol
 import java.util.Objects.isNull
 
 /**
@@ -23,33 +25,14 @@ class ValidatorService(
     companion object {
         const val MAX_REFERENCE_LENGTH = 2048
 
-        private val VALID_IP_V4_ADDRESS_REGEXP = (
-            "^(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-5]{2})(?:\\.)){3}" +
-            "(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-5]{2})(?=\$|\\/|:|\\?))"
+        private val VALID_IP_V4_ADDRESS_REGEXP = (//255 249
+            "^(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])(?:\\.)){3}" +
+            "(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])(?=\$|\\/|:|\\?))"
         ).toRegex()
 
         private val POSSIBLE_IP_V4_ADDRESS_REGEXP =
-            "(?:(?:[0-9]{1,3})(?:\\.)){3}(?:(?:[0-9]{1,3})(?=\$|\\/|:|\\?))"
+            "^(?:(?:[0-9]{1,3})(?:\\.)){3}(?:(?:[0-9]{1,3})(?=\$|\\/|:|\\?))"
             .toRegex()
-    }
-
-    enum class Protocol(
-        private val prefix: String,
-        private val allowed: Boolean
-    ){
-        HTTP("http://", true),
-        HTTPS("https://", true),
-        FTP("ftp://", false),
-        FILE("file://", false),
-        DATA("data:", false);
-
-        fun getPrefix() = prefix
-        fun isAllowed() = allowed
-
-        companion object {
-            val ALLOWED_PROTOCOLS = values().filter { it.isAllowed() }
-            val NOT_ALLOWED_PROTOCOLS = values().filter { !it.isAllowed() }
-        }
     }
 
     fun isDomainAllowed(input: String): Boolean {

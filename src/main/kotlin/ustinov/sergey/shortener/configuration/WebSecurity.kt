@@ -1,6 +1,5 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.configuration
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -9,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import ustinov.sergey.shortener.ApplicationConfigurer.Companion.API_BASE_PATH
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer.Companion.API_BASE_PATH
 
 @Configuration
 @EnableWebSecurity

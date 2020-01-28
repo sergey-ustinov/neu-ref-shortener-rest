@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
+import ustinov.sergey.shortener.JavaSystemVariablesPrinter.printJavaVariables
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer
+import ustinov.sergey.shortener.configuration.MongoConfig
 
 @SpringBootApplication(
     exclude = [
@@ -23,6 +26,7 @@ open class UrlShortenerApp {
             SpringApplicationBuilder(UrlShortenerApp::class.java)
                 .bannerMode(Banner.Mode.OFF)
                 .run()
+            printJavaVariables()
         }
     }
 
@@ -30,5 +34,5 @@ open class UrlShortenerApp {
     open fun applicationConfigurer(
         @Value("\${server.port}") port: Int,
         @Value("\${allowed-origins}") origins: String
-    ) = ApplicationConfigurer(port, origins)
+    ) = ApplicationConfigurer(port, origins).printApplicationVariables()
 }

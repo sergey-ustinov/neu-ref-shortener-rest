@@ -1,5 +1,6 @@
 package ustinov.sergey.shortener
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
@@ -8,9 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import ustinov.sergey.shortener.ApplicationConfigurer.Companion.API_BASE_PATH
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer
+import ustinov.sergey.shortener.configuration.ApplicationConfigurer.Companion.API_BASE_PATH
 import ustinov.sergey.shortener.exceptions.WrongUserInputException
 import ustinov.sergey.shortener.model.Reference
+import ustinov.sergey.shortener.service.ReferenceManagerService
+import ustinov.sergey.shortener.service.ValidatorService
 import javax.servlet.http.HttpServletResponse
 
 @RestController
@@ -23,6 +27,8 @@ class Controller {
     private lateinit var validatorService: ValidatorService
     @Autowired
     private lateinit var cfg: ApplicationConfigurer
+
+    private val logger = LoggerFactory.getLogger(Controller::class.java)
 
     @GetMapping("/{id}",
         produces = [ MediaType.APPLICATION_JSON_VALUE ]
@@ -44,9 +50,11 @@ class Controller {
     )
     fun create(@RequestBody source: String): String {
         if (!validatorService.validateHttpReference(source)) {
+            logger.info("Detected input data that didn't pass validation: $source")
             throw WrongUserInputException("Provided reference has wrong format. Unable to shorten this")
         }
         if (!validatorService.isDomainAllowed(source)) {
+            logger.info("Detected input data of restricted domain: $source")
             throw WrongUserInputException("Provided reference can't be shortened")
         }
         return convertToResponse(

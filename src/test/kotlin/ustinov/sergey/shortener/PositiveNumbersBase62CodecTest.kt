@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils.isAlphanumeric
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import ustinov.sergey.shortener.service.PositiveNumbersBase62Codec
 import kotlin.random.Random
 import kotlin.test.assertEquals
 

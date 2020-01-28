@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.service
 
 import org.springframework.stereotype.Component
 import java.util.Arrays
