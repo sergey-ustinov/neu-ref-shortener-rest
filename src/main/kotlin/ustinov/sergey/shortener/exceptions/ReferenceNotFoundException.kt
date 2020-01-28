@@ -5,4 +5,4 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import java.lang.Exception
 
 @ResponseStatus(NOT_FOUND)
-class ReferenceNotFoundException(message: String) : Exception(message)
+class ReferenceNotFoundException(message: String) : AbstractSystemException(message)
