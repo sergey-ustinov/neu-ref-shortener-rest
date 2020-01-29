@@ -12,6 +12,7 @@ import ustinov.sergey.shortener.exceptions.AbstractSystemException
 import ustinov.sergey.shortener.exceptions.ServerException
 import ustinov.sergey.shortener.service.ManagementFacade
 import ustinov.sergey.shortener.service.model.CreatedRecordsPerSecondAggregationResult
+import ustinov.sergey.shortener.service.model.TotalCreatedRecordsPerMonthAggregationResult
 
 @RestController
 @RequestMapping(MGMT_BASE_PATH)
@@ -21,6 +22,17 @@ class ManagementController {
 
     @Autowired
     private lateinit var managementFacade: ManagementFacade
+
+    @GetMapping("/year",
+        produces = [ MediaType.APPLICATION_JSON_VALUE ]
+    )
+    fun getTotalCreatedRecordsPerMonthStatistic(
+        @RequestParam("year", required = false) input: String?
+    ): List<TotalCreatedRecordsPerMonthAggregationResult> {
+        return safeExecute {
+            managementFacade.getTotalCreatedRecordsPerMonthStatistic(input)
+        }
+    }
 
     @GetMapping("/creation",
         produces = [ MediaType.APPLICATION_JSON_VALUE ]
