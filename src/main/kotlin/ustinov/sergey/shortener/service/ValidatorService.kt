@@ -2,7 +2,7 @@ package ustinov.sergey.shortener.service
 
 import org.springframework.stereotype.Component
 import ustinov.sergey.shortener.configuration.ApplicationConfigurer
-import ustinov.sergey.shortener.Protocol
+import ustinov.sergey.shortener.service.model.Protocol
 import java.util.Objects.isNull
 
 /**
@@ -26,7 +26,7 @@ class ValidatorService(
         const val MAX_REFERENCE_LENGTH = 2048
         const val MAX_REFERENCE_COUNT_IN_BATCH = 50
 
-        private val VALID_IP_V4_ADDRESS_REGEXP = (//255 249
+        private val VALID_IP_V4_ADDRESS_REGEXP = (
             "^(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])(?:\\.)){3}" +
             "(?:(?:[0-9]{1,2}|0[0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])(?=\$|\\/|:|\\?))"
         ).toRegex()

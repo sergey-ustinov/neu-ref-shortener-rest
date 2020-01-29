@@ -9,7 +9,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean
 import org.springframework.context.annotation.Bean
-import ustinov.sergey.shortener.JavaSystemVariablesPrinter.printJavaVariables
+import org.springframework.context.annotation.Import
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
+import ustinov.sergey.shortener.auxiliary.Disposable
+import ustinov.sergey.shortener.auxiliary.ExampleServletContextListener
+import ustinov.sergey.shortener.auxiliary.JavaSystemVariablesPrinter.printJavaVariables
 import ustinov.sergey.shortener.configuration.ApplicationConfigurer
 import ustinov.sergey.shortener.configuration.MongoConfig
 import javax.servlet.ServletContextListener
@@ -21,6 +25,7 @@ import javax.servlet.ServletContextListener
     ]
 )
 @EnableConfigurationProperties(MongoConfig::class)
+@EnableMongoRepositories
 open class UrlShortenerApp {
     companion object {
         @JvmStatic

@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.auxiliary
 
 interface Disposable {
     fun dispose()

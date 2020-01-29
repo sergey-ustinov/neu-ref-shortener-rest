@@ -10,10 +10,11 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import ustinov.sergey.shortener.service.ValidatorService.Companion.MAX_REFERENCE_LENGTH
-import ustinov.sergey.shortener.Protocol.Companion.ALLOWED_PROTOCOLS
-import ustinov.sergey.shortener.Protocol.Companion.NOT_ALLOWED_PROTOCOLS
+import ustinov.sergey.shortener.service.model.Protocol.Companion.ALLOWED_PROTOCOLS
+import ustinov.sergey.shortener.service.model.Protocol.Companion.NOT_ALLOWED_PROTOCOLS
 import ustinov.sergey.shortener.configuration.ApplicationConfigurer
 import ustinov.sergey.shortener.service.ValidatorService
+import ustinov.sergey.shortener.service.model.Protocol
 import kotlin.random.Random
 
 @ExtendWith(MockitoExtension::class)

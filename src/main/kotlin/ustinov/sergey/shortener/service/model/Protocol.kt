@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.service.model
 
 enum class Protocol(
     private val prefix: String,

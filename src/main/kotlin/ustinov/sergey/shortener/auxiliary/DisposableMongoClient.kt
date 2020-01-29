@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.auxiliary
 
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI

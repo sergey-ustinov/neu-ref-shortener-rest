@@ -1,4 +1,4 @@
-package ustinov.sergey.shortener
+package ustinov.sergey.shortener.auxiliary
 
 import org.slf4j.LoggerFactory
 import javax.servlet.ServletContextEvent

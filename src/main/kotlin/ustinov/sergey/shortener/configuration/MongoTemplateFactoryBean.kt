@@ -1,6 +1,5 @@
 package ustinov.sergey.shortener.configuration
 
-import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
 import com.mongodb.MongoClientURI
 import com.mongodb.ReadConcern
@@ -15,7 +14,7 @@ import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext
-import ustinov.sergey.shortener.DisposableMongoClient
+import ustinov.sergey.shortener.auxiliary.DisposableMongoClient
 import java.util.concurrent.TimeUnit.MILLISECONDS
 
 @Configuration
@@ -24,7 +23,7 @@ open class MongoTemplateFactoryBean {
     @Autowired
     private lateinit var config: MongoConfig
 
-    @Bean
+    @Bean(name = [ "mongoTemplate" ])
     open fun createMongoTemplate(mongoClient: DisposableMongoClient): MongoTemplate {
         val mongoDbFactory = SimpleMongoDbFactory(mongoClient, config.db!!)
         return MongoTemplate(mongoDbFactory, getConverter(mongoDbFactory))
