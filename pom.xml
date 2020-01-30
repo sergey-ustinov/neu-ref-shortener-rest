@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ustinov.sergey</groupId>
-  <artifactId>neueda</artifactId>
+  <artifactId>neu-ref-shortener</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>neueda</name>
+  <name>neu-ref-shortener</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

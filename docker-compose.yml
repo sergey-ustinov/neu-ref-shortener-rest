@@ -2,17 +2,17 @@ version: '3.5'
 
 services:
   mongodb:
-    container_name: neueda-mongo
+    container_name: neu-ref-mongo
     image: mongo:4.0
     ports:
       - "27017:27017"
     networks:
-      neueda-virtual:
+      neu-net-virtual:
         ipv4_address: 172.19.0.4
 
 networks:
-  neueda-virtual:
-    name: neueda-virtual
+  neu-net-virtual:
+    name: neu-net-virtual
     driver: bridge
     ipam:
       config:

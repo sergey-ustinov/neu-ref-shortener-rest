@@ -5,7 +5,7 @@ allowed-origins: ${ALLOWED_ORIGINS_WITH_DELIMETER:http://localhost:8023}
 
 mongodb:
   url: ${MONGODB_URL:mongodb://127.0.0.1:27017}
-  db: ${MONGODB_DB_NAME:neueda}
+  db: ${MONGODB_DB_NAME:neu-ref}
   connectTimeout: ${MONGODB_CONNECT_TIMEOUT:60000}
   socketTimeout: ${MONGODB_SOCKET_TIMEOUT:90000}
   maxConnectionIdleTime: ${MONGODB_MAX_IDLE_TIME:120000}

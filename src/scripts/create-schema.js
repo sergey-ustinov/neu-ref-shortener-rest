@@ -1,4 +1,4 @@
-use neueda
+use neu-ref
 
 db.reference.drop();
 db.createCollection("reference");
