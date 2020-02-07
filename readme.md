@@ -99,18 +99,19 @@ docker start neu-ref-shortener-service
 
 ### (Optional) Full docker clean up
 ```
-docker stop neueda-swagger
-docker stop neueda-service
-docker stop neueda-mongo
+docker stop neu-ref-shortener-swagger
+docker stop neu-ref-shortener-service
+docker stop neu-ref-mongo
 
-docker rm neueda-swagger
-docker rm neueda-service
-docker rm neueda-mongo
+docker rm neu-ref-shortener-swagger
+docker rm neu-ref-shortener-service
+docker rm neu-ref-mongo
 
-docker network rm neueda-virtual
+docker network rm neu-net-virtual
 
-docker rmi neueda-shortener-swagger-img
-docker rmi neueda-shortener-service-img
-docker rmi swaggerapi/swagger-ui
-docker rmi mongo
+docker rmi neu-ref-shortener-swagger-img:latest
+docker rmi neu-ref-shortener-service-img:latest
+docker rmi swaggerapi/swagger-ui:latest
+docker rmi mongo:4.0
+docker rmi openjdk:12.0.2-oracle
 ```
